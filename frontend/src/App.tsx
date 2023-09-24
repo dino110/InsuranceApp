@@ -4,13 +4,17 @@ import Header from "./components/Header";
 import SideBar from "./components/SideBar";
 import MainForm from "./components/MainForm";
 
+import { InsuranceContextProvider } from "./InsuranceContext";
+
 function App() {
   return (
-    <Container>
-      <Header />
-      <SideBar />
-      <MainForm />
-    </Container>
+    <InsuranceContextProvider>
+      <Container>
+        <Header />
+        <SideBar />
+        <MainForm />
+      </Container>
+    </InsuranceContextProvider>
   );
 }
 

@@ -1,19 +1,25 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Checkbox, Grid, FormControlLabel, Typography } from "@mui/material";
+import { useInsuranceContext } from "../../InsuranceContext";
 
 interface FormData {
   commercialDiscount: boolean;
-  agentsDiscount: boolean;
-  summerDiscount: boolean;
-  strongCatSurcharge: boolean;
+  adviserDiscount: boolean;
+  vipDiscount: boolean;
+  strongCarSurcharge: boolean;
 }
 
 const Header: React.FC = () => {
-  const { control, formState } = useForm<FormData>();
+  const { control } = useForm<FormData>();
 
-  const handleChange = (name: string, isChecked: boolean) => {
-    console.log(`${name} is ${isChecked ? "checked" : "unchecked"}`);
+  const { textFields, setCheckboxes } = useInsuranceContext();
+
+  const handleChange = (name: string, value: boolean) => {
+    setCheckboxes((prevCheckBoxes) => ({
+      ...prevCheckBoxes,
+      [name]: value,
+    }));
   };
 
   return (
@@ -36,9 +42,7 @@ const Header: React.FC = () => {
                   <Checkbox
                     {...field}
                     color="primary"
-                    onChange={(e) =>
-                      handleChange("Commercial Discount", e.target.checked)
-                    }
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
@@ -50,63 +54,62 @@ const Header: React.FC = () => {
           <FormControlLabel
             control={
               <Controller
-                name="agentsDiscount"
+                name="adviserDiscount"
                 control={control}
                 defaultValue={false}
                 render={({ field }) => (
                   <Checkbox
                     {...field}
                     color="primary"
-                    onChange={(e) =>
-                      handleChange("Agents Discount", e.target.checked)
-                    }
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
             }
-            label="Agents Discount"
+            label="Adviser Discount"
           />
         </Grid>
+        {Number(textFields.vehiclePower) > 80 && (
+          <Grid item xs={6} md={2}>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="vipDiscount"
+                  control={control}
+                  defaultValue={false}
+                  render={({ field }) => (
+                    <Checkbox
+                      {...field}
+                      color="primary"
+                      onChange={(e, value) =>
+                        handleChange(e.target.name, value)
+                      }
+                    />
+                  )}
+                />
+              }
+              label="VIP Discount"
+            />
+          </Grid>
+        )}
         <Grid item xs={6} md={2}>
           <FormControlLabel
             control={
               <Controller
-                name="summerDiscount"
+                name="strongCarSurcharge"
                 control={control}
                 defaultValue={false}
                 render={({ field }) => (
                   <Checkbox
                     {...field}
+                    disabled={true}
+                    checked={Number(textFields.vehiclePower) > 100}
                     color="primary"
-                    onChange={(e) =>
-                      handleChange("Summer Discount", e.target.checked)
-                    }
                   />
                 )}
               />
             }
-            label="Summer Discount"
-          />
-        </Grid>
-        <Grid item xs={6} md={2}>
-          <FormControlLabel
-            control={
-              <Controller
-                name="strongCatSurcharge"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e) =>
-                      handleChange("Strong Cat Surcharge", e.target.checked)
-                    }
-                  />
-                )}
-              />
-            }
-            label="Strong Cat Surcharge"
+            label="Strong Car Surcharge"
           />
         </Grid>
         <Grid item xs={6} md={2}>

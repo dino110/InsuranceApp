@@ -1,15 +1,15 @@
-// Form.tsx
 import React from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box } from "@mui/material";
+import { useInsuranceContext } from "../../InsuranceContext";
 
 interface FormData {
   name: string;
   birthdate: string;
   city: string;
-  vehiclePower: number;
-  voucher: number;
-  priceMatch: number;
+  vehiclePower: string;
+  voucher: string;
+  priceMatch: string;
 }
 
 const MainForm: React.FC = () => {
@@ -19,8 +19,18 @@ const MainForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const { checkboxes, setTextFields } = useInsuranceContext();
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log("submited!", { ...data });
+    setTextFields((prevTextFields) => ({ ...prevTextFields, ...data }));
+    console.log("submited!", { ...data, ...checkboxes });
+  };
+
+  const handleVehiclePowerChange = (value: string) => {
+    setTextFields((prevTextFields) => ({
+      ...prevTextFields,
+      vehiclePower: value,
+    }));
   };
 
   return (
@@ -33,7 +43,7 @@ const MainForm: React.FC = () => {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
+                required: "Name is required",
               }}
               render={({ field }) => (
                 <TextField
@@ -52,7 +62,7 @@ const MainForm: React.FC = () => {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
+                required: "Birthdate is required",
               }}
               render={({ field }) => (
                 <TextField
@@ -75,7 +85,7 @@ const MainForm: React.FC = () => {
               control={control}
               defaultValue=""
               rules={{
-                required: true,
+                required: "City is required",
               }}
               render={({ field }) => (
                 <TextField
@@ -93,15 +103,22 @@ const MainForm: React.FC = () => {
               name="vehiclePower"
               control={control}
               rules={{
-                required: true,
+                required: "Vehicle power is required",
+                min: {
+                  value: 1,
+                  message: "Vehicle power needs to be at least 1",
+                },
               }}
-              defaultValue={0}
+              defaultValue=""
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Vehicle Power (kW)"
                   type="number"
                   fullWidth
+                  onBlur={(e) => {
+                    handleVehiclePowerChange(e.target.value);
+                  }}
                   error={!!errors.vehiclePower}
                   helperText={errors.vehiclePower?.message}
                 />
@@ -112,19 +129,9 @@ const MainForm: React.FC = () => {
             <Controller
               name="voucher"
               control={control}
-              rules={{
-                required: true,
-              }}
-              defaultValue={0}
+              defaultValue="0"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Voucher"
-                  type="number"
-                  fullWidth
-                  error={!!errors.vehiclePower}
-                  helperText={errors.vehiclePower?.message}
-                />
+                <TextField {...field} label="Voucher" type="number" fullWidth />
               )}
             />
           </Grid>
@@ -132,25 +139,20 @@ const MainForm: React.FC = () => {
             <Controller
               name="priceMatch"
               control={control}
-              rules={{
-                required: true,
-              }}
-              defaultValue={0}
+              defaultValue=""
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Price match"
                   type="number"
                   fullWidth
-                  error={!!errors.vehiclePower}
-                  helperText={errors.vehiclePower?.message}
                 />
               )}
             />
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              Save
             </Button>
           </Grid>
         </Grid>

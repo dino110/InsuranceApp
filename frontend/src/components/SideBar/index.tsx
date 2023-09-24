@@ -8,6 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { useInsuranceContext } from "../../InsuranceContext";
 
 const Container = styled(Box)({
   float: "right",
@@ -23,24 +24,29 @@ interface FormData {
 }
 
 const SideBar = (): JSX.Element => {
-  const { control, formState } = useForm<FormData>();
+  const { control } = useForm<FormData>();
 
-  const handleChange = (name: string, isChecked: boolean) => {
-    console.log(`${name} is ${isChecked ? "checked" : "unchecked"}`);
+  const { setCheckboxes } = useInsuranceContext();
+
+  const handleChange = (name: string, value: boolean) => {
+    setCheckboxes((prevCheckBoxes) => ({
+      ...prevCheckBoxes,
+      [name]: value,
+    }));
   };
 
   return (
     <Container>
-      <Typography fontWeight={600} variant="h6" align="left">
-        Coverages
-      </Typography>
       <form>
         <Stack
           direction="column"
           justifyItems="left"
           padding="16px 24px"
-          gap="24px"
+          gap="16px"
         >
+          <Typography fontWeight={600} variant="h6" align="left">
+            Coverages
+          </Typography>
           <FormControlLabel
             control={
               <Controller
@@ -51,9 +57,7 @@ const SideBar = (): JSX.Element => {
                   <Checkbox
                     {...field}
                     color="primary"
-                    onChange={(e) =>
-                      handleChange("Bonus protection", e.target.checked)
-                    }
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
@@ -70,7 +74,7 @@ const SideBar = (): JSX.Element => {
                   <Checkbox
                     {...field}
                     color="primary"
-                    onChange={(e) => handleChange("AO +", e.target.checked)}
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
@@ -87,9 +91,7 @@ const SideBar = (): JSX.Element => {
                   <Checkbox
                     {...field}
                     color="primary"
-                    onChange={(e) =>
-                      handleChange("Glass coverage", e.target.checked)
-                    }
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
