@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 
-interface FormData {
+export interface FormData {
   name: string;
   birthdate: string;
   city: string;
@@ -19,16 +19,16 @@ const MainForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { discounts, coverages, setTextFields } = useInsuranceContext();
+  const { discounts, coverages, setMainForm } = useInsuranceContext();
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    setTextFields((prevTextFields) => ({ ...prevTextFields, ...data }));
-    console.log("submited!", { ...data, ...discounts, ...coverages });
+  const onSubmit: SubmitHandler<FormData> = (formData) => {
+    setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
+    console.log("submited!", { formData, discounts, coverages });
   };
 
   const handleVehiclePowerChange = (value: string) => {
-    setTextFields((prevTextFields) => ({
-      ...prevTextFields,
+    setMainForm((prevMainForm) => ({
+      ...prevMainForm,
       vehiclePower: value,
     }));
   };

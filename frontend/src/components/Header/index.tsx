@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Checkbox, Grid, FormControlLabel, Typography } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 
-interface FormData {
+export interface Discounts {
   commercialDiscount: boolean;
   adviserDiscount: boolean;
   vipDiscount: boolean;
@@ -11,9 +11,9 @@ interface FormData {
 }
 
 const Header: React.FC = () => {
-  const { control } = useForm<FormData>();
+  const { control } = useForm<Discounts>();
 
-  const { textFields, setDiscounts } = useInsuranceContext();
+  const { mainForm, setDiscounts } = useInsuranceContext();
 
   const handleChange = (name: string, value: boolean) => {
     setDiscounts((prevDiscounts) => ({
@@ -23,8 +23,8 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    handleChange("strongCarSurcharge", Number(textFields.vehiclePower) > 100);
-  }, [textFields.vehiclePower]);
+    handleChange("strongCarSurcharge", Number(mainForm.vehiclePower) > 100);
+  }, [mainForm.vehiclePower]);
 
   return (
     <form>
@@ -73,7 +73,7 @@ const Header: React.FC = () => {
             label="Adviser Discount"
           />
         </Grid>
-        {Number(textFields.vehiclePower) > 80 && (
+        {Number(mainForm.vehiclePower) > 80 && (
           <Grid item xs={6} md={2}>
             <FormControlLabel
               control={
@@ -107,7 +107,7 @@ const Header: React.FC = () => {
                   <Checkbox
                     {...field}
                     disabled={true}
-                    checked={Number(textFields.vehiclePower) > 100}
+                    checked={Number(mainForm.vehiclePower) > 100}
                     color="primary"
                   />
                 )}

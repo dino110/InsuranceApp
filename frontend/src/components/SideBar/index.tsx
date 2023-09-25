@@ -10,6 +10,12 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useInsuranceContext } from "../../InsuranceContext";
 
+export interface Coverages {
+  bonusProtection: boolean;
+  aoPlus: boolean;
+  glassProtection: boolean;
+}
+
 const Container = styled(Box)({
   float: "right",
   position: "relative",
@@ -17,14 +23,8 @@ const Container = styled(Box)({
   border: "1px solid red",
 });
 
-interface FormData {
-  bonusProtection: boolean;
-  aoPlus: boolean;
-  glassCoverage: boolean;
-}
-
 const SideBar = (): JSX.Element => {
-  const { control } = useForm<FormData>();
+  const { control } = useForm<Coverages>();
 
   const { setCoverages } = useInsuranceContext();
 
@@ -84,7 +84,7 @@ const SideBar = (): JSX.Element => {
           <FormControlLabel
             control={
               <Controller
-                name="glassCoverage"
+                name="glassProtection"
                 control={control}
                 defaultValue={false}
                 render={({ field }) => (

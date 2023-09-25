@@ -1,33 +1,21 @@
 import React, { createContext, useContext, useState } from "react";
 
+import { Discounts } from "./components/Header";
+import { FormData } from "./components/MainForm";
+import { Coverages } from "./components/SideBar";
+
 interface InsuranceContextType {
-  discounts: {
-    commercialDiscount: boolean;
-    adviserDiscount: boolean;
-    vipDiscount: boolean;
-    strongCarSurcharge: boolean;
-  };
-  coverages: {
-    glassProtection: boolean;
-    bonusProtection: boolean;
-    aoPlus: boolean;
-  };
-  textFields: {
-    name: string;
-    birthdate: string;
-    city: string;
-    vehiclePower: string;
-    voucher: string;
-    priceMatch: string;
-  };
+  discounts: Discounts;
+  coverages: Coverages;
+  mainForm: FormData;
   setDiscounts: React.Dispatch<
     React.SetStateAction<InsuranceContextType["discounts"]>
   >;
   setCoverages: React.Dispatch<
     React.SetStateAction<InsuranceContextType["coverages"]>
   >;
-  setTextFields: React.Dispatch<
-    React.SetStateAction<InsuranceContextType["textFields"]>
+  setMainForm: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["mainForm"]>
   >;
 }
 
@@ -61,7 +49,7 @@ export function InsuranceContextProvider({
     aoPlus: false,
   });
 
-  const [textFields, setTextFields] = useState({
+  const [mainForm, setMainForm] = useState({
     name: "",
     birthdate: "",
     city: "",
@@ -73,8 +61,8 @@ export function InsuranceContextProvider({
   const value = {
     discounts,
     coverages,
-    textFields,
-    setTextFields,
+    mainForm,
+    setMainForm,
     setCoverages,
     setDiscounts,
   };
