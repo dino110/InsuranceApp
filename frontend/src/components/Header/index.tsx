@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Checkbox, Grid, FormControlLabel, Typography } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
@@ -13,14 +13,18 @@ interface FormData {
 const Header: React.FC = () => {
   const { control } = useForm<FormData>();
 
-  const { textFields, setCheckboxes } = useInsuranceContext();
+  const { textFields, setDiscounts } = useInsuranceContext();
 
   const handleChange = (name: string, value: boolean) => {
-    setCheckboxes((prevCheckBoxes) => ({
-      ...prevCheckBoxes,
+    setDiscounts((prevDiscounts) => ({
+      ...prevDiscounts,
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    handleChange("strongCarSurcharge", Number(textFields.vehiclePower) > 100);
+  }, [textFields.vehiclePower]);
 
   return (
     <form>

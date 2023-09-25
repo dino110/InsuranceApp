@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface InsuranceContextType {
-  checkboxes: {
+  discounts: {
     commercialDiscount: boolean;
     adviserDiscount: boolean;
     vipDiscount: boolean;
     strongCarSurcharge: boolean;
+  };
+  coverages: {
     glassProtection: boolean;
     bonusProtection: boolean;
     aoPlus: boolean;
@@ -18,8 +20,11 @@ interface InsuranceContextType {
     voucher: string;
     priceMatch: string;
   };
-  setCheckboxes: React.Dispatch<
-    React.SetStateAction<InsuranceContextType["checkboxes"]>
+  setDiscounts: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["discounts"]>
+  >;
+  setCoverages: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["coverages"]>
   >;
   setTextFields: React.Dispatch<
     React.SetStateAction<InsuranceContextType["textFields"]>
@@ -43,11 +48,14 @@ export function InsuranceContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [checkboxes, setCheckboxes] = useState({
+  const [discounts, setDiscounts] = useState({
     commercialDiscount: false,
     adviserDiscount: false,
     vipDiscount: false,
     strongCarSurcharge: false,
+  });
+
+  const [coverages, setCoverages] = useState({
     glassProtection: false,
     bonusProtection: false,
     aoPlus: false,
@@ -63,10 +71,12 @@ export function InsuranceContextProvider({
   });
 
   const value = {
-    checkboxes,
+    discounts,
+    coverages,
     textFields,
-    setCheckboxes,
     setTextFields,
+    setCoverages,
+    setDiscounts,
   };
 
   return (

@@ -26,11 +26,11 @@ interface FormData {
 const SideBar = (): JSX.Element => {
   const { control } = useForm<FormData>();
 
-  const { setCheckboxes } = useInsuranceContext();
+  const { setCoverages } = useInsuranceContext();
 
   const handleChange = (name: string, value: boolean) => {
-    setCheckboxes((prevCheckBoxes) => ({
-      ...prevCheckBoxes,
+    setCoverages((prevCoverages) => ({
+      ...prevCoverages,
       [name]: value,
     }));
   };

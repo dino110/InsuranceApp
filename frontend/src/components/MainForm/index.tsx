@@ -19,11 +19,11 @@ const MainForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { checkboxes, setTextFields } = useInsuranceContext();
+  const { discounts, coverages, setTextFields } = useInsuranceContext();
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setTextFields((prevTextFields) => ({ ...prevTextFields, ...data }));
-    console.log("submited!", { ...data, ...checkboxes });
+    console.log("submited!", { ...data, ...discounts, ...coverages });
   };
 
   const handleVehiclePowerChange = (value: string) => {
