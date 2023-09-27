@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
+import { getInsurancePrice } from "../../api";
 
 export interface FormData {
   name: string;
@@ -21,9 +22,11 @@ const MainForm: React.FC = () => {
 
   const { discounts, coverages, setMainForm } = useInsuranceContext();
 
-  const onSubmit: SubmitHandler<FormData> = (formData) => {
+  const onSubmit: SubmitHandler<FormData> = async (formData) => {
     setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
     console.log("submited!", { formData, discounts, coverages });
+    const prices = await getInsurancePrice({ formData, discounts, coverages });
+    console.log({ prices });
   };
 
   const handleVehiclePowerChange = (value: string) => {
