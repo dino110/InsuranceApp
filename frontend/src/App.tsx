@@ -3,7 +3,7 @@ import { Container } from "@mui/material";
 import Header from "./components/Header";
 import SideBar from "./components/SideBar";
 import MainForm from "./components/MainForm";
-
+import Calculations from "./components/Calculations";
 import { InsuranceContextProvider } from "./InsuranceContext";
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
         <Header />
         <SideBar />
         <MainForm />
+        <Calculations />
       </Container>
     </InsuranceContextProvider>
   );
