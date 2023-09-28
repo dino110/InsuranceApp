@@ -96,7 +96,7 @@ const SideBar = (): JSX.Element => {
                 )}
               />
             }
-            label="Glass coverage"
+            label="Glass protection"
           />
         </Stack>
       </form>

@@ -10,7 +10,8 @@ import {
 import { useInsuranceContext } from "../../InsuranceContext";
 
 const Calculations: React.FC = () => {
-  const { mainForm, discounts, coverages } = useInsuranceContext();
+  const { discountPrices, coveragePrices, insurancePrices } =
+    useInsuranceContext();
 
   function generate(element: React.ReactElement) {
     return [0, 1, 2].map((value) =>
@@ -21,9 +22,9 @@ const Calculations: React.FC = () => {
   }
 
   return (
-    <Box maxWidth="sm" sx={{ mt: "40px" }}>
+    <Box maxWidth="sm" sx={{ mt: "60px", mb: "40px" }}>
       <Grid container spacing={2}></Grid>
-      <Typography>Basic price: {} EUR</Typography>
+      <Typography>Basic price: {insurancePrices.basePrice} EUR</Typography>
       <Grid item xs={12} md={6}>
         <Typography sx={{ mt: 2, mb: 1 }}>Discounts:</Typography>
         <List>
@@ -44,7 +45,7 @@ const Calculations: React.FC = () => {
           )}
         </List>
       </Grid>
-      <Typography>Total price: {} EUR</Typography>
+      <Typography>Total price: {insurancePrices.totalPrice} EUR</Typography>
       <Grid />
     </Box>
   );
