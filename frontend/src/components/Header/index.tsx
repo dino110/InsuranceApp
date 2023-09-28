@@ -13,7 +13,7 @@ export interface Discounts {
 const Header: React.FC = () => {
   const { control } = useForm<Discounts>();
 
-  const { mainForm, setDiscounts } = useInsuranceContext();
+  const { mainForm, setDiscounts, insurancePrices } = useInsuranceContext();
 
   const handleChange = (name: string, value: boolean) => {
     setDiscounts((prevDiscounts) => ({
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
         </Grid>
         <Grid item xs={6} md={2}>
           <Typography>
-            <strong>Total price:</strong> {} EUR
+            <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
           </Typography>
         </Grid>
       </Grid>

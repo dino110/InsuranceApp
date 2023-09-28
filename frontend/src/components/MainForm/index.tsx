@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
@@ -20,13 +20,46 @@ const MainForm: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { discounts, coverages, setMainForm } = useInsuranceContext();
+  const {
+    discounts,
+    coverages,
+    mainForm,
+    setMainForm,
+    setCoveragePrices,
+    setDiscountPrices,
+    setInsurancePrices,
+  } = useInsuranceContext();
 
-  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+  const getAndSetPrices = async () => {
+    console.log("unutra");
+    if (mainForm.birthdate) {
+      console.log("šalji!");
+      const allPrices = await getInsurancePrice({
+        mainForm,
+        discounts,
+        coverages,
+      });
+
+      if (allPrices.status === "success") {
+        const { insurancePrices, coveragePrices, discountPrices } =
+          allPrices.data;
+        setCoveragePrices(coveragePrices);
+        setDiscountPrices(discountPrices);
+        setInsurancePrices(insurancePrices);
+      } else {
+        alert(allPrices.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log("chenge triggered!");
+    getAndSetPrices();
+  }, [mainForm, discounts, coverages]);
+
+  const onSubmit: SubmitHandler<FormData> = (formData) => {
     setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
-    console.log("submited!", { formData, discounts, coverages });
-    const prices = await getInsurancePrice({ formData, discounts, coverages });
-    console.log({ prices });
+    //  getAndSetPrices();
   };
 
   const handleVehiclePowerChange = (value: string) => {

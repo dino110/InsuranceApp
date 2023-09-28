@@ -4,10 +4,32 @@ import { Discounts } from "./components/Header";
 import { FormData } from "./components/MainForm";
 import { Coverages } from "./components/SideBar";
 
+export interface InsurancePrices {
+  basePrice: number;
+  totalPrice: number;
+  voucher: number;
+}
+
+export interface CoveragePrices {
+  bonusProtection: number;
+  aoPlus: number;
+  glassProtection: number;
+}
+
+export interface DiscountPrices {
+  commercialDiscount: number;
+  adviserDiscount: number;
+  vipDiscount: number;
+  strongCarSurcharge: number;
+}
+
 interface InsuranceContextType {
   discounts: Discounts;
   coverages: Coverages;
   mainForm: FormData;
+  insurancePrices: InsurancePrices;
+  coveragePrices: CoveragePrices;
+  discountPrices: DiscountPrices;
   setDiscounts: React.Dispatch<
     React.SetStateAction<InsuranceContextType["discounts"]>
   >;
@@ -16,6 +38,15 @@ interface InsuranceContextType {
   >;
   setMainForm: React.Dispatch<
     React.SetStateAction<InsuranceContextType["mainForm"]>
+  >;
+  setInsurancePrices: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["insurancePrices"]>
+  >;
+  setCoveragePrices: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["coveragePrices"]>
+  >;
+  setDiscountPrices: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["discountPrices"]>
   >;
 }
 
@@ -58,13 +89,38 @@ export function InsuranceContextProvider({
     priceMatch: "",
   });
 
+  const [discountPrices, setDiscountPrices] = useState({
+    commercialDiscount: 0,
+    adviserDiscount: 0,
+    vipDiscount: 0,
+    strongCarSurcharge: 0,
+  });
+
+  const [coveragePrices, setCoveragePrices] = useState({
+    bonusProtection: 0,
+    aoPlus: 0,
+    glassProtection: 0,
+  });
+
+  const [insurancePrices, setInsurancePrices] = useState({
+    basePrice: 0,
+    totalPrice: 0,
+    voucher: 0,
+  });
+
   const value = {
     discounts,
+    setDiscounts,
     coverages,
+    setCoverages,
     mainForm,
     setMainForm,
-    setCoverages,
-    setDiscounts,
+    discountPrices,
+    setDiscountPrices,
+    coveragePrices,
+    setCoveragePrices,
+    insurancePrices,
+    setInsurancePrices,
   };
 
   return (
