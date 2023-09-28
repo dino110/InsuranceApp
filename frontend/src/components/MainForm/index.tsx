@@ -31,9 +31,7 @@ const MainForm: React.FC = () => {
   } = useInsuranceContext();
 
   const getAndSetPrices = async () => {
-    console.log("unutra");
     if (mainForm.birthdate) {
-      console.log("šalji!");
       const allPrices = await getInsurancePrice({
         mainForm,
         discounts,
@@ -53,7 +51,6 @@ const MainForm: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("chenge triggered!");
     getAndSetPrices();
   }, [mainForm, discounts, coverages]);
 
