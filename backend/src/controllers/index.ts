@@ -46,53 +46,34 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
 
     const basePrice = calculateBasePrice(
       ageConsant,
-      Number(cityPopulation.cityPopulation)
+      +cityPopulation.cityPopulation
     );
 
     if (basePrice === 0) {
       return res.status(400).send("User must be at least 18 years old");
     }
 
-    const voucher = Number(mainForm.voucher);
-    const { bonusProtection, aoPlus, glassProtection } = calculateCoverages(
+    const voucher = +mainForm.voucher;
+    const coveragePrices = calculateCoverages(
       basePrice,
       customerAge,
       mainForm.vehiclePower,
       coverages
     );
 
-    const {
-      commercialDiscount,
-      adviserDiscount,
-      vipDiscount,
-      strongCarSurcharge,
-      totalPrice,
-    } = calculateDiscountsAndTotalPrice(
+    const { discountPrices, totalPrice } = calculateDiscountsAndTotalPrice(
       basePrice,
-      voucher,
       discounts,
-      bonusProtection,
-      aoPlus,
-      glassProtection
+      coveragePrices,
+      voucher
     );
 
-    finalData = {
-      coveragePrices: {
-        bonusProtection,
-        aoPlus,
-        glassProtection,
-      },
-      discountPrices: {
-        commercialDiscount,
-        adviserDiscount,
-        vipDiscount,
-        strongCarSurcharge,
-      },
-      insurancePrices: {
-        basePrice,
-        totalPrice,
-        voucher,
-      },
+    finalData.coveragePrices = coveragePrices;
+    finalData.discountPrices = discountPrices;
+    finalData.insurancePrices = {
+      basePrice,
+      totalPrice,
+      voucher,
     };
   } else {
     const basePrice = +(
@@ -111,9 +92,7 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     finalData.coveragePrices.bonusProtection = bonusProtection;
     finalData.insurancePrices.basePrice = basePrice;
     finalData.discountPrices.commercialDiscount = commercialDiscount;
-    finalData.insurancePrices.totalPrice = Number(mainForm.priceMatch);
-    console.log(finalData);
-    //res.send(finalData);
+    finalData.insurancePrices.totalPrice = +mainForm.priceMatch;
   }
   res.send(finalData);
 };

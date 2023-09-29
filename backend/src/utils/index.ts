@@ -1,4 +1,4 @@
-import { Discounts, Coverages } from "../types";
+import { Discounts, Coverages, CoveragePrices, DiscountPrices } from "../types";
 
 export const calculateBasePrice = (
   ageConsant: number,
@@ -14,13 +14,13 @@ export const calculateCoverages = (
   customerAge: number,
   vehiclePower: number,
   coverages: Coverages
-): { [key: string]: number } => {
+): CoveragePrices => {
   const bonusProtection = coverages.bonusProtection
-    ? (basePrice * 12) / 100
+    ? +((basePrice * 12) / 100).toFixed(2)
     : 0;
   const aoPlus = coverages.aoPlus ? (customerAge < 30 ? 55 : 105) : 0;
   const glassProtection = coverages.glassProtection
-    ? (vehiclePower * 80) / 100
+    ? +((vehiclePower * 80) / 100).toFixed(2)
     : 0;
 
   return {
@@ -32,13 +32,11 @@ export const calculateCoverages = (
 
 export const calculateDiscountsAndTotalPrice = (
   basePrice: number,
-  voucher: number,
   discounts: Discounts,
-  bonusProtection: number,
-  aoPlus: number,
-  glassProtection: number
-): { [key: string]: number } => {
-  const coveragesArr = [bonusProtection, aoPlus, glassProtection];
+  coveragePrices: CoveragePrices,
+  voucher: number
+): { discountPrices: DiscountPrices; totalPrice: number } => {
+  const coveragesArr = [...Object.values(coveragePrices)];
 
   //negative value so we can sum it
   const commercialDiscount = discounts.commercialDiscount
@@ -71,10 +69,12 @@ export const calculateDiscountsAndTotalPrice = (
   const totalPrice = +(totalPriceBefore + vipDiscount - voucher).toFixed(2);
 
   return {
-    commercialDiscount,
-    adviserDiscount,
-    vipDiscount,
-    strongCarSurcharge,
+    discountPrices: {
+      commercialDiscount,
+      adviserDiscount,
+      vipDiscount,
+      strongCarSurcharge,
+    },
     totalPrice,
   };
 };

@@ -14,10 +14,27 @@ export interface Discounts {
   strongCarSurcharge: boolean;
 }
 
+export interface DiscountPrices {
+  commercialDiscount: number;
+  adviserDiscount: number;
+  vipDiscount: number;
+  strongCarSurcharge: number;
+}
+
 export interface Coverages {
   bonusProtection: boolean;
   aoPlus: boolean;
   glassProtection: boolean;
 }
 
-export interface AllData extends FormData, Discounts, Coverages {}
+export interface CoveragePrices {
+  bonusProtection: number;
+  aoPlus: number;
+  glassProtection: number;
+}
+
+export interface InsurancePrices {
+  basePrice: number;
+  totalPrice: number;
+  voucher: number;
+}
