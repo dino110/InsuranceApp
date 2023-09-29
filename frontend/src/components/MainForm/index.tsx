@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { TextField, Button, Grid, Box } from "@mui/material";
+import { TextField, Button, Grid, Box, InputAdornment } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 import { getInsurancePrice } from "../../api";
 
@@ -31,32 +31,33 @@ const MainForm: React.FC = () => {
   } = useInsuranceContext();
 
   const getAndSetPrices = async () => {
-    if (mainForm.birthdate) {
-      const allPrices = await getInsurancePrice({
-        mainForm,
-        discounts,
-        coverages,
-      });
+    console.log("api calling....");
+    const allPrices = await getInsurancePrice({
+      mainForm,
+      discounts,
+      coverages,
+    });
 
-      if (allPrices.status === "success") {
-        const { insurancePrices, coveragePrices, discountPrices } =
-          allPrices.data;
-        setCoveragePrices(coveragePrices);
-        setDiscountPrices(discountPrices);
-        setInsurancePrices(insurancePrices);
-      } else {
-        alert(allPrices.message);
-      }
+    if (allPrices.status === "success") {
+      const { insurancePrices, coveragePrices, discountPrices } =
+        allPrices.data;
+      setCoveragePrices(coveragePrices);
+      setDiscountPrices(discountPrices);
+      setInsurancePrices(insurancePrices);
+    } else {
+      alert(allPrices.message);
     }
   };
 
   useEffect(() => {
-    getAndSetPrices();
+    if (mainForm.birthdate) {
+      getAndSetPrices();
+    }
   }, [mainForm, discounts, coverages]);
 
   const onSubmit: SubmitHandler<FormData> = (formData) => {
     setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
-    //  getAndSetPrices();
+    // getAndSetPrices();
   };
 
   const handleVehiclePowerChange = (value: string) => {
@@ -67,7 +68,7 @@ const MainForm: React.FC = () => {
   };
 
   return (
-    <Box maxWidth="sm" sx={{ mt: "40px" }}>
+    <Box maxWidth="420px" sx={{ mt: "40px" }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -164,7 +165,17 @@ const MainForm: React.FC = () => {
               control={control}
               defaultValue="0"
               render={({ field }) => (
-                <TextField {...field} label="Voucher" type="number" fullWidth />
+                <TextField
+                  {...field}
+                  label="Voucher"
+                  type="number"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">EUR</InputAdornment>
+                    ),
+                  }}
+                />
               )}
             />
           </Grid>
@@ -179,6 +190,11 @@ const MainForm: React.FC = () => {
                   label="Price match"
                   type="number"
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">EUR</InputAdornment>
+                    ),
+                  }}
                 />
               )}
             />
