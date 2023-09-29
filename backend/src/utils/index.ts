@@ -1,10 +1,12 @@
-import { Discounts, Coverages, FormData } from "../types";
+import { Discounts, Coverages } from "../types";
 
 export const calculateBasePrice = (
   ageConsant: number,
   cityPopulaton: number
 ): number => {
-  return (ageConsant * cityPopulaton) / 10;
+  const cityConst = Math.pow(cityPopulaton, 1 / 6);
+  const basePrice = Math.round(cityConst * ageConsant) * 10;
+  return basePrice;
 };
 
 export const calculateCoverages = (
@@ -47,7 +49,10 @@ export const calculateDiscountsAndTotalPrice = (
   const adviserDiscount =
     discounts.adviserDiscount &&
     coveragesArr.filter((item) => item > 0).length >= 2
-      ? -((coveragesArr.reduce((acc, value) => acc + value, 0) * 20) / 100)
+      ? -(
+          (coveragesArr.reduce((acc, value) => acc + value, 0) * 20) /
+          100
+        ).toFixed(2)
       : 0;
 
   const strongCarSurcharge = discounts.strongCarSurcharge ? basePrice / 10 : 0;
@@ -60,10 +65,10 @@ export const calculateDiscountsAndTotalPrice = (
     strongCarSurcharge,
   ].reduce((acc, value) => acc + value, 0);
   const vipDiscount = discounts.vipDiscount
-    ? -((totalPriceBefore * 5) / 100)
+    ? -((totalPriceBefore * 5) / 100).toFixed(2)
     : 0;
 
-  const totalPrice = totalPriceBefore + vipDiscount - voucher;
+  const totalPrice = +(totalPriceBefore + vipDiscount - voucher).toFixed(2);
 
   return {
     commercialDiscount,
