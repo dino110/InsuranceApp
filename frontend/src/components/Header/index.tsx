@@ -51,7 +51,7 @@ const Header: React.FC = () => {
                 )}
               />
             }
-            label="Commercial Discount"
+            label="Commercial discount"
           />
         </Grid>
         <Grid item xs={6} md={2}>
@@ -70,7 +70,7 @@ const Header: React.FC = () => {
                 )}
               />
             }
-            label="Adviser Discount"
+            label="Adviser discount"
           />
         </Grid>
         {Number(mainForm.vehiclePower) > 80 && (
@@ -92,7 +92,7 @@ const Header: React.FC = () => {
                   )}
                 />
               }
-              label="VIP Discount"
+              label="VIP discount"
             />
           </Grid>
         )}
@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                 )}
               />
             }
-            label="Strong Car Surcharge"
+            label="Strong car surcharge"
           />
         </Grid>
         <Grid item xs={6} md={2}>

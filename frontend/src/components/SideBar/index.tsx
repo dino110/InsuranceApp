@@ -79,7 +79,7 @@ const SideBar = (): JSX.Element => {
                 )}
               />
             }
-            label="AO +"
+            label="AO+"
           />
           <FormControlLabel
             control={
