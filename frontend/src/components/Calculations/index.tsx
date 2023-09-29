@@ -68,14 +68,14 @@ const Calculations: React.FC = () => {
         </Stack>
       </Box>
       <Box>
-        <Typography sx={{ disaplay: "inline" }}>
+        <Typography display="inline">
           <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
-          {insurancePrices.voucher > 0 && (
-            <Typography display="inline" ml={2} fontSize={14}>
-              ({insurancePrices.voucher} EUR voucher included)
-            </Typography>
-          )}
         </Typography>
+        {insurancePrices.voucher > 0 && (
+          <Typography display="inline" ml={2} fontSize={14}>
+            ({insurancePrices.voucher} EUR voucher included)
+          </Typography>
+        )}
       </Box>
     </Stack>
   );
