@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import createHttpError from "http-errors";
 import router from "./routes";
+import connectDB from "./database/connection";
 
 config();
 
@@ -18,6 +19,16 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next(new createHttpError.NotFound());
 });*/
 
-app.listen(PORT, () => {
-  console.log(`Server is up on port ${PORT}!`);
-});
+connectDB()
+  .then(() => {
+    try {
+      app.listen(PORT, () => {
+        console.log(`Server is up on port ${PORT}!`);
+      });
+    } catch (error) {
+      console.log("Invalid server connection!");
+    }
+  })
+  .catch((error) => {
+    console.log("Invalid DB connection!");
+  });

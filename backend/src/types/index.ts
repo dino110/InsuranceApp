@@ -38,3 +38,10 @@ export interface InsurancePrices {
   totalPrice: number;
   voucher: number;
 }
+
+export interface FinalData {
+  userData: FormData;
+  coveragePrices: CoveragePrices;
+  discountPrices: DiscountPrices;
+  insurancePrices: InsurancePrices;
+}
