@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 
 const Calculations: React.FC = () => {
-  const { discountPrices, coveragePrices, insurancePrices } =
+  const { discountPrices, coveragePrices, insurancePrices, mainForm } =
     useInsuranceContext();
 
   return (
@@ -71,7 +71,7 @@ const Calculations: React.FC = () => {
         <Typography display="inline">
           <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
         </Typography>
-        {insurancePrices.voucher > 0 && (
+        {+mainForm.voucher > 0 && (
           <Typography display="inline" ml={2} fontSize={14}>
             ({insurancePrices.voucher} EUR voucher included)
           </Typography>

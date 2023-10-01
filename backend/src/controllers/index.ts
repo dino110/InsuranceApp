@@ -7,11 +7,17 @@ import {
   calculateDiscountsAndTotalPrice,
 } from "../utils";
 import axios from "axios";
+import Insurance from "../model/insurance.model";
 
 export const getInsurancePrice = async (req: Request, res: Response) => {
   const { mainForm, discounts, coverages } = req.body;
 
-  var finalData = {
+  if (!mainForm) {
+    return res.status(400).send("No data provided!");
+  }
+
+  var InsuranceData = {
+    userData: mainForm,
     coveragePrices: {
       bonusProtection: 0,
       aoPlus: 0,
@@ -26,10 +32,10 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     insurancePrices: {
       basePrice: 0,
       totalPrice: 0,
-      voucher: 0,
     },
   };
 
+  //
   if (mainForm.priceMatch === "") {
     const customerAge = calculateAge(mainForm.birthdate);
     const ageConsant = getConstantByAge(customerAge);
@@ -53,7 +59,6 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
       return res.status(400).send("User must be at least 18 years old");
     }
 
-    const voucher = +mainForm.voucher;
     const coveragePrices = calculateCoverages(
       basePrice,
       customerAge,
@@ -65,17 +70,17 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
       basePrice,
       discounts,
       coveragePrices,
-      voucher
+      +mainForm.voucher
     );
 
-    finalData.coveragePrices = coveragePrices;
-    finalData.discountPrices = discountPrices;
-    finalData.insurancePrices = {
+    InsuranceData.coveragePrices = coveragePrices;
+    InsuranceData.discountPrices = discountPrices;
+    InsuranceData.insurancePrices = {
       basePrice,
       totalPrice,
-      voucher,
     };
   } else {
+    // Price match calculation
     const basePrice = +(
       mainForm.priceMatch /
       (1 +
@@ -89,12 +94,20 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
       ? +((basePrice * 10) / 100).toFixed(2)
       : 0;
 
-    finalData.coveragePrices.bonusProtection = bonusProtection;
-    finalData.insurancePrices.basePrice = basePrice;
-    finalData.discountPrices.commercialDiscount = commercialDiscount;
-    finalData.insurancePrices.totalPrice = +mainForm.priceMatch;
+    InsuranceData.coveragePrices.bonusProtection = bonusProtection;
+    InsuranceData.insurancePrices.basePrice = basePrice;
+    InsuranceData.discountPrices.commercialDiscount = commercialDiscount;
+    InsuranceData.insurancePrices.totalPrice = +mainForm.priceMatch;
   }
-  res.send(finalData);
+
+  const insurance = new Insurance(InsuranceData);
+  insurance
+    .save()
+    .then()
+    .catch((error: any) => {
+      console.log(error);
+    });
+  res.send(InsuranceData);
 };
 
 const getCityPopulation = async (
