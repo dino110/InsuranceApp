@@ -44,7 +44,7 @@ export const getInsurancePrice = async (data: {
   } catch (error: any) {
     return {
       status: "error",
-      message: error.response.data,
+      message: error.response.data.error,
     };
   }
 };

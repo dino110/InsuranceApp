@@ -15,11 +15,11 @@ export const calculateCoverages = (
   vehiclePower: number,
   coverages: Coverages
 ): CoveragePrices => {
-  const bonusProtection = coverages.bonusProtection
+  const bonusProtection = coverages?.bonusProtection
     ? +((basePrice * 12) / 100).toFixed(2)
     : 0;
-  const aoPlus = coverages.aoPlus ? (customerAge < 30 ? 55 : 105) : 0;
-  const glassProtection = coverages.glassProtection
+  const aoPlus = coverages?.aoPlus ? (customerAge < 30 ? 55 : 105) : 0;
+  const glassProtection = coverages?.glassProtection
     ? +((vehiclePower * 80) / 100).toFixed(2)
     : 0;
 
@@ -39,13 +39,13 @@ export const calculateDiscountsAndTotalPrice = (
   const coveragesArr = [...Object.values(coveragePrices)];
 
   //negative value so we can sum it
-  const commercialDiscount = discounts.commercialDiscount
+  const commercialDiscount = discounts?.commercialDiscount
     ? -(basePrice / 10)
     : 0;
 
   //negative value so we can sum it
   const adviserDiscount =
-    discounts.adviserDiscount &&
+    discounts?.adviserDiscount &&
     coveragesArr.filter((item) => item > 0).length >= 2
       ? -(
           (coveragesArr.reduce((acc, value) => acc + value, 0) * 20) /
@@ -53,7 +53,7 @@ export const calculateDiscountsAndTotalPrice = (
         ).toFixed(2)
       : 0;
 
-  const strongCarSurcharge = discounts.strongCarSurcharge ? basePrice / 10 : 0;
+  const strongCarSurcharge = discounts?.strongCarSurcharge ? basePrice / 10 : 0;
 
   const totalPriceBefore = [
     basePrice,
@@ -62,7 +62,7 @@ export const calculateDiscountsAndTotalPrice = (
     adviserDiscount,
     strongCarSurcharge,
   ].reduce((acc, value) => acc + value, 0);
-  const vipDiscount = discounts.vipDiscount
+  const vipDiscount = discounts?.vipDiscount
     ? -((totalPriceBefore * 5) / 100).toFixed(2)
     : 0;
 

@@ -13,7 +13,7 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
   const { mainForm, discounts, coverages } = req.body;
 
   if (!mainForm) {
-    return res.status(400).send("No data provided!");
+    return res.status(400).send({ error: "No data provided!" });
   }
 
   var InsuranceData = {
@@ -40,24 +40,27 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     const customerAge = calculateAge(mainForm.birthdate);
     const ageConsant = getConstantByAge(customerAge);
 
-    const cityPopulation = await getCityPopulation(mainForm.city);
-
+    const cityPopulation = 10; //await getCityPopulation(mainForm.city);
+    /*
     if (cityPopulation.error) {
       return res
         .status(Number(cityPopulation.status))
-        .send(cityPopulation.error);
+        .send({ error: cityPopulation.error });
     } else if (cityPopulation.cityPopulation === "0") {
-      return res.status(404).send("There is no data for provided city");
-    }
+      return res
+        .status(404)
+        .send({ error: "There is no data for provided city" });
+    }*/
 
+    if (ageConsant === 0) {
+      return res
+        .status(400)
+        .send({ error: "User must be at least 18 years old" });
+    }
     const basePrice = calculateBasePrice(
       ageConsant,
-      +cityPopulation.cityPopulation
+      10 // +cityPopulation.cityPopulation
     );
-
-    if (basePrice === 0) {
-      return res.status(400).send("User must be at least 18 years old");
-    }
 
     const coveragePrices = calculateCoverages(
       basePrice,
@@ -84,13 +87,13 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     const basePrice = +(
       mainForm.priceMatch /
       (1 +
-        (coverages.bonusProtection * 12) / 100 -
-        (discounts.commercialDiscount * 10) / 100)
+        (coverages?.bonusProtection || 0) * (12 / 100) -
+        (discounts?.commercialDiscount || 0) * (10 / 100))
     ).toFixed(2);
-    const bonusProtection = coverages.bonusProtection
+    const bonusProtection = coverages?.bonusProtection
       ? +((basePrice * 12) / 100).toFixed(2)
       : 0;
-    const commercialDiscount = discounts.commercialDiscount
+    const commercialDiscount = discounts?.commercialDiscount
       ? +((basePrice * 10) / 100).toFixed(2)
       : 0;
 
@@ -123,6 +126,7 @@ const getCityPopulation = async (
         },
       }
     );
+
     if (populationResponse.data[0]) {
       const cityPopulation = populationResponse.data[0].population;
       return {
@@ -134,7 +138,7 @@ const getCityPopulation = async (
       };
     }
   } catch (error: any) {
-    const err = error.response.data.error;
-    return { error: err, status: error.response.status };
+    const err = error.response.data.error || "Some error occurred";
+    return { error: err, status: error.response.status || 500 };
   }
 };

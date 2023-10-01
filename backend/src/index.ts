@@ -4,6 +4,7 @@ import cors from "cors";
 import createHttpError from "http-errors";
 import router from "./routes";
 import connectDB from "./database/connection";
+import { errorHandler } from "./middlewares";
 
 config();
 
@@ -14,10 +15,11 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", router);
 
-/*
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(new createHttpError.NotFound());
-});*/
+});
+
+app.use(errorHandler);
 
 connectDB()
   .then(() => {
