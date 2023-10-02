@@ -7,7 +7,6 @@ import { Coverages } from "./components/SideBar";
 export interface InsurancePrices {
   basePrice: number;
   totalPrice: number;
-  voucher: number;
 }
 
 export interface CoveragePrices {
@@ -105,7 +104,6 @@ export function InsuranceContextProvider({
   const [insurancePrices, setInsurancePrices] = useState({
     basePrice: 0,
     totalPrice: 0,
-    voucher: 0,
   });
 
   const value = {
