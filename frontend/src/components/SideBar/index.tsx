@@ -19,8 +19,9 @@ export interface Coverages {
 const Container = styled(Box)({
   float: "right",
   position: "relative",
-  width: "260px",
-  border: "1px solid red",
+  marginBottom: "16px",
+  padding: "8px 0px",
+  backgroundColor: "#D3D3D3",
 });
 
 const SideBar = (): JSX.Element => {
@@ -36,17 +37,22 @@ const SideBar = (): JSX.Element => {
   };
 
   return (
-    <Container>
+    <Container width={{ xs: "100%", md: "260px" }}>
       <form>
+        <Typography
+          fontWeight={600}
+          sx={{ padding: "12px 8px" }}
+          variant="h6"
+          align="left"
+        >
+          Coverages
+        </Typography>
         <Stack
-          direction="column"
+          direction={{ xs: "row", md: "column" }}
           justifyItems="left"
-          padding="16px 24px"
+          padding="0px 8px"
           gap="16px"
         >
-          <Typography fontWeight={600} variant="h6" align="left">
-            Coverages
-          </Typography>
           <FormControlLabel
             control={
               <Controller

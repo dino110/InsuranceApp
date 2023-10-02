@@ -31,7 +31,6 @@ const MainForm: React.FC = () => {
   } = useInsuranceContext();
 
   const getAndSetPrices = async (formData = mainForm) => {
-    console.log("api call.....");
     const allPrices = await getInsurancePrice({
       mainForm: formData,
       discounts,

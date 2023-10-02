@@ -27,102 +27,103 @@ const Header: React.FC = () => {
   }, [mainForm.vehiclePower]);
 
   return (
-    <form>
-      <Grid
-        container
-        columns={{ xs: 12, md: 10 }}
-        alignItems="center"
-        border="1px solid red"
-        sx={{ padding: "16px 0px" }}
-      >
-        <Grid item xs={6} md={2}>
-          <FormControlLabel
-            control={
-              <Controller
-                name="commercialDiscount"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e, value) => handleChange(e.target.name, value)}
-                  />
-                )}
-              />
-            }
-            label="Commercial discount"
-          />
-        </Grid>
-        <Grid item xs={6} md={2}>
-          <FormControlLabel
-            control={
-              <Controller
-                name="adviserDiscount"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e, value) => handleChange(e.target.name, value)}
-                  />
-                )}
-              />
-            }
-            label="Adviser discount"
-          />
-        </Grid>
-        {Number(mainForm.vehiclePower) > 80 && (
-          <Grid item xs={6} md={2}>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="vipDiscount"
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <Checkbox
-                      {...field}
-                      color="primary"
-                      onChange={(e, value) =>
-                        handleChange(e.target.name, value)
-                      }
-                    />
-                  )}
+    <Grid
+      container
+      columns={{ xs: 12, md: 10 }}
+      alignItems="center"
+      sx={{ padding: "16px 8px", backgroundColor: "#D3D3D3" }}
+    >
+      <Grid item xs={6} md={2}>
+        <FormControlLabel
+          control={
+            <Controller
+              name="commercialDiscount"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  color="primary"
+                  onChange={(e, value) => handleChange(e.target.name, value)}
                 />
-              }
-              label="VIP discount"
+              )}
             />
-          </Grid>
-        )}
+          }
+          label="Commercial discount"
+        />
+      </Grid>
+      <Grid item xs={6} md={2}>
+        <FormControlLabel
+          control={
+            <Controller
+              name="adviserDiscount"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  color="primary"
+                  onChange={(e, value) => handleChange(e.target.name, value)}
+                />
+              )}
+            />
+          }
+          label="Adviser discount"
+        />
+      </Grid>
+      {Number(mainForm.vehiclePower) > 80 && (
         <Grid item xs={6} md={2}>
           <FormControlLabel
             control={
               <Controller
-                name="strongCarSurcharge"
+                name="vipDiscount"
                 control={control}
                 defaultValue={false}
                 render={({ field }) => (
                   <Checkbox
                     {...field}
-                    disabled={true}
-                    checked={Number(mainForm.vehiclePower) > 100}
                     color="primary"
+                    onChange={(e, value) => handleChange(e.target.name, value)}
                   />
                 )}
               />
             }
-            label="Strong car surcharge"
+            label="VIP discount"
           />
         </Grid>
-        <Grid item xs={6} md={2}>
-          <Typography>
-            <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
-          </Typography>
-        </Grid>
+      )}
+      <Grid item xs={6} md={2}>
+        <FormControlLabel
+          control={
+            <Controller
+              name="strongCarSurcharge"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  disabled={true}
+                  checked={Number(mainForm.vehiclePower) > 100}
+                  color="primary"
+                />
+              )}
+            />
+          }
+          label="Strong car surcharge"
+        />
       </Grid>
-    </form>
+      <Grid
+        item
+        xs={12}
+        md={2}
+        order={{ xs: "-9999", md: "9999" }}
+        mb={{ xs: "12px", md: "0px" }}
+      >
+        <Typography>
+          <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
+        </Typography>
+      </Grid>
+    </Grid>
   );
 };
 
