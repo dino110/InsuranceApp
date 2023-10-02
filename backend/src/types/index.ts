@@ -4,7 +4,7 @@ export interface FormData {
   city: string;
   vehiclePower: string;
   voucher: string;
-  priceMatch?: string;
+  priceMatch: string;
 }
 
 export interface Discounts {
@@ -36,10 +36,9 @@ export interface CoveragePrices {
 export interface InsurancePrices {
   basePrice: number;
   totalPrice: number;
-  voucher: number;
 }
 
-export interface FinalData {
+export interface InsuranceData {
   userData: FormData;
   coveragePrices: CoveragePrices;
   discountPrices: DiscountPrices;

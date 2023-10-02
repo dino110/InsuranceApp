@@ -6,20 +6,37 @@ import {
   calculateCoverages,
   calculateDiscountsAndTotalPrice,
 } from "../utils";
+import {
+  Coverages,
+  Discounts,
+  FormData,
+  CoveragePrices,
+  DiscountPrices,
+  InsuranceData,
+} from "../types";
 import Axios from "axios";
 import { setupCache } from "axios-cache-interceptor";
 import Insurance from "../model/insurance.model";
 
 const axios = setupCache(Axios);
 
-export const getInsurancePrice = async (req: Request, res: Response) => {
+interface RequestBody {
+  mainForm: FormData;
+  discounts?: Discounts;
+  coverages?: Coverages;
+}
+
+export const getInsurancePrice = async (
+  req: Request<RequestBody>,
+  res: Response
+) => {
   const { mainForm, discounts, coverages } = req.body;
 
   if (!mainForm) {
     return res.status(400).send({ error: "No data provided!" });
   }
 
-  var InsuranceData = {
+  var InsuranceData: InsuranceData = {
     userData: mainForm,
     coveragePrices: {
       bonusProtection: 0,
@@ -38,46 +55,51 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     },
   };
 
-  // if provided priceMatch is not bigger than 0 (or NaN)
+  // if provided priceMatch is not bigger than 0 or its NaN, ie priceMatch not provided
   if (!(Number(mainForm.priceMatch) > 0)) {
     const customerAge = calculateAge(mainForm.birthdate);
     const ageConsant = getConstantByAge(customerAge);
-
-    const cityPopulation = await getCityPopulation(mainForm.city);
-
-    if (cityPopulation.error) {
-      return res
-        .status(Number(cityPopulation.status))
-        .send({ error: cityPopulation.error });
-    } else if (cityPopulation.cityPopulation === "0") {
-      return res
-        .status(404)
-        .send({ error: "There is no data for provided city" });
-    }
 
     if (ageConsant === 0) {
       return res
         .status(400)
         .send({ error: "User must be at least 18 years old" });
     }
-    const basePrice = calculateBasePrice(
+
+    const cityPopulation = await getCityPopulation(mainForm.city);
+
+    if (cityPopulation?.error) {
+      return res
+        .status(Number(cityPopulation.status))
+        .send({ error: cityPopulation.error });
+    } else if (cityPopulation.cityPopulation === 0) {
+      return res
+        .status(404)
+        .send({ error: "There is no data for provided city" });
+    }
+
+    const basePrice: number = calculateBasePrice(
       ageConsant,
-      +cityPopulation.cityPopulation
+      Number(cityPopulation.cityPopulation)
     );
 
-    const coveragePrices = calculateCoverages(
+    const coveragePrices: CoveragePrices = calculateCoverages(
       basePrice,
       customerAge,
-      mainForm.vehiclePower,
+      Number(mainForm.vehiclePower),
       coverages
     );
 
-    const { discountPrices, totalPrice } = calculateDiscountsAndTotalPrice(
-      basePrice,
-      discounts,
-      coveragePrices,
-      +mainForm.voucher
-    );
+    const {
+      discountPrices,
+      totalPrice,
+    }: { discountPrices: DiscountPrices; totalPrice: number } =
+      calculateDiscountsAndTotalPrice(
+        basePrice,
+        coveragePrices,
+        Number(mainForm.voucher),
+        discounts
+      );
 
     InsuranceData.coveragePrices = coveragePrices;
     InsuranceData.discountPrices = discountPrices;
@@ -87,22 +109,22 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     };
   } else {
     // Price match calculation
-    const basePrice = +(
-      mainForm.priceMatch /
+    const basePrice: number = +(
+      +mainForm.priceMatch /
       (1 +
-        (coverages?.bonusProtection || 0) * (12 / 100) -
-        (discounts?.commercialDiscount || 0) * (10 / 100))
+        (coverages?.bonusProtection ? 12 / 100 : 0) -
+        (discounts?.commercialDiscount ? 10 / 100 : 0))
     ).toFixed(2);
-    const bonusProtection = coverages?.bonusProtection
+    const bonusProtection: number = coverages?.bonusProtection
       ? +((basePrice * 12) / 100).toFixed(2)
       : 0;
-    const commercialDiscount = discounts?.commercialDiscount
+    const commercialDiscount: number = discounts?.commercialDiscount
       ? +((basePrice * 10) / 100).toFixed(2)
       : 0;
 
     InsuranceData.coveragePrices.bonusProtection = bonusProtection;
-    InsuranceData.insurancePrices.basePrice = basePrice;
     InsuranceData.discountPrices.commercialDiscount = commercialDiscount;
+    InsuranceData.insurancePrices.basePrice = basePrice;
     InsuranceData.insurancePrices.totalPrice = +mainForm.priceMatch;
   }
 
@@ -118,7 +140,7 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
 
 const getCityPopulation = async (
   city: string
-): Promise<{ [key: string]: string }> => {
+): Promise<{ cityPopulation?: number; error?: string; status?: number }> => {
   try {
     const populationResponse = await axios.get(
       `https://api.api-ninjas.com/v1/city?name=${city}`,
@@ -134,13 +156,13 @@ const getCityPopulation = async (
       }
     );
     if (populationResponse.data[0]?.population) {
-      const cityPopulation = populationResponse.data[0].population;
+      const cityPopulation: number = populationResponse.data[0].population;
       return {
         cityPopulation,
       };
     } else {
       return {
-        cityPopulation: "0",
+        cityPopulation: 0,
       };
     }
   } catch (error: any) {

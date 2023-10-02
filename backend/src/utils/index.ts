@@ -13,13 +13,13 @@ export const calculateCoverages = (
   basePrice: number,
   customerAge: number,
   vehiclePower: number,
-  coverages: Coverages
+  coverages?: Coverages
 ): CoveragePrices => {
-  const bonusProtection = coverages?.bonusProtection
+  const bonusProtection: number = coverages?.bonusProtection
     ? +((basePrice * 12) / 100).toFixed(2)
     : 0;
-  const aoPlus = coverages?.aoPlus ? (customerAge < 30 ? 55 : 105) : 0;
-  const glassProtection = coverages?.glassProtection
+  const aoPlus: number = coverages?.aoPlus ? (customerAge < 30 ? 55 : 105) : 0;
+  const glassProtection: number = coverages?.glassProtection
     ? +((vehiclePower * 80) / 100).toFixed(2)
     : 0;
 
@@ -32,19 +32,19 @@ export const calculateCoverages = (
 
 export const calculateDiscountsAndTotalPrice = (
   basePrice: number,
-  discounts: Discounts,
   coveragePrices: CoveragePrices,
-  voucher: number
+  voucher: number,
+  discounts?: Discounts
 ): { discountPrices: DiscountPrices; totalPrice: number } => {
   const coveragesArr = [...Object.values(coveragePrices)];
 
   //negative value so we can sum it
-  const commercialDiscount = discounts?.commercialDiscount
+  const commercialDiscount: number = discounts?.commercialDiscount
     ? -(basePrice / 10)
     : 0;
 
   //negative value so we can sum it
-  const adviserDiscount =
+  const adviserDiscount: number =
     discounts?.adviserDiscount &&
     coveragesArr.filter((item) => item > 0).length >= 2
       ? -(
@@ -53,20 +53,27 @@ export const calculateDiscountsAndTotalPrice = (
         ).toFixed(2)
       : 0;
 
-  const strongCarSurcharge = discounts?.strongCarSurcharge ? basePrice / 10 : 0;
+  const strongCarSurcharge: number = discounts?.strongCarSurcharge
+    ? basePrice / 10
+    : 0;
 
-  const totalPriceBefore = [
+  const totalPriceBefore: number = [
     basePrice,
     ...coveragesArr,
     commercialDiscount,
     adviserDiscount,
     strongCarSurcharge,
   ].reduce((acc, value) => acc + value, 0);
-  const vipDiscount = discounts?.vipDiscount
+
+  const vipDiscount: number = discounts?.vipDiscount
     ? -((totalPriceBefore * 5) / 100).toFixed(2)
     : 0;
 
-  const totalPrice = +(totalPriceBefore + vipDiscount - voucher).toFixed(2);
+  const totalPrice: number = +(
+    totalPriceBefore +
+    vipDiscount -
+    voucher
+  ).toFixed(2);
 
   return {
     discountPrices: {

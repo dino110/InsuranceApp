@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
 
-import { FinalData } from "../types";
+import { InsuranceData } from "../types";
 
-const InsuranceSchema = new Schema<FinalData>({
+const InsuranceSchema = new Schema<InsuranceData>({
   userData: {
     name: String,
     birthdate: String,
@@ -25,9 +25,8 @@ const InsuranceSchema = new Schema<FinalData>({
   insurancePrices: {
     basePrice: Number,
     totalPrice: Number,
-    voucher: Number,
   },
 });
-const Insurance = model<FinalData>("Insurance", InsuranceSchema);
+const Insurance = model<InsuranceData>("Insurance", InsuranceSchema);
 
 export default Insurance;
