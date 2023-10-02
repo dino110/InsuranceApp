@@ -35,13 +35,13 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     },
   };
 
-  //
-  if (mainForm.priceMatch === "") {
+  // if provided priceMatch is not bigger than 0 (or NaN)
+  if (!(Number(mainForm.priceMatch) > 0)) {
     const customerAge = calculateAge(mainForm.birthdate);
     const ageConsant = getConstantByAge(customerAge);
 
-    const cityPopulation = 10; //await getCityPopulation(mainForm.city);
-    /*
+    const cityPopulation = await getCityPopulation(mainForm.city);
+
     if (cityPopulation.error) {
       return res
         .status(Number(cityPopulation.status))
@@ -50,7 +50,7 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
       return res
         .status(404)
         .send({ error: "There is no data for provided city" });
-    }*/
+    }
 
     if (ageConsant === 0) {
       return res
@@ -59,7 +59,7 @@ export const getInsurancePrice = async (req: Request, res: Response) => {
     }
     const basePrice = calculateBasePrice(
       ageConsant,
-      10 // +cityPopulation.cityPopulation
+      +cityPopulation.cityPopulation
     );
 
     const coveragePrices = calculateCoverages(
