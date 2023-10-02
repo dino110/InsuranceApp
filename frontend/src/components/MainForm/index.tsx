@@ -17,7 +17,7 @@ const MainForm: React.FC = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful, isValid },
   } = useForm<FormData>();
 
   const {
@@ -30,10 +30,10 @@ const MainForm: React.FC = () => {
     setInsurancePrices,
   } = useInsuranceContext();
 
-  const getAndSetPrices = async () => {
-    console.log("api calling....");
+  const getAndSetPrices = async (formData = mainForm) => {
+    console.log("api call.....");
     const allPrices = await getInsurancePrice({
-      mainForm,
+      mainForm: formData,
       discounts,
       coverages,
     });
@@ -50,14 +50,19 @@ const MainForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (mainForm.birthdate) {
+    if (isSubmitSuccessful === true && isValid) {
       getAndSetPrices();
     }
-  }, [mainForm, discounts, coverages]);
+  }, [
+    discounts.commercialDiscount,
+    discounts.adviserDiscount,
+    discounts.vipDiscount,
+    coverages,
+  ]);
 
   const onSubmit: SubmitHandler<FormData> = (formData) => {
     setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
-    // getAndSetPrices();
+    getAndSetPrices(formData);
   };
 
   const handleVehiclePowerChange = (value: string) => {
