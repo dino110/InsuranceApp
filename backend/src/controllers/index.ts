@@ -6,8 +6,11 @@ import {
   calculateCoverages,
   calculateDiscountsAndTotalPrice,
 } from "../utils";
-import axios from "axios";
+import Axios from "axios";
+import { setupCache } from "axios-cache-interceptor";
 import Insurance from "../model/insurance.model";
+
+const axios = setupCache(Axios);
 
 export const getInsurancePrice = async (req: Request, res: Response) => {
   const { mainForm, discounts, coverages } = req.body;
@@ -122,12 +125,15 @@ const getCityPopulation = async (
       {
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "TV8D326FoECzom44sqmBwg==yquXqD3ZS6bH8r14",
+          "x-api-key": "TV8D326FoECzom44sqmBwg==yquXqD3ZS6bH8r14", //`${process.env.API_KEY}`
+        },
+        id: city,
+        cache: {
+          ttl: 1000 * 60 * 60 * 12, // 12 hours
         },
       }
     );
-
-    if (populationResponse.data[0]) {
+    if (populationResponse.data[0]?.population) {
       const cityPopulation = populationResponse.data[0].population;
       return {
         cityPopulation,
