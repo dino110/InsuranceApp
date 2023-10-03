@@ -75,7 +75,7 @@ const Calculations: React.FC = () => {
         <Typography display="inline" marginLeft={1}>
           {insurancePrices.totalPrice} EUR
         </Typography>
-        {+customerData.voucher > 0 && (
+        {+customerData.voucher > 0 && insurancePrices.basePrice > 0 && (
           <Typography display="inline" ml={2} fontSize={14}>
             ({customerData.voucher} EUR voucher included)
           </Typography>
