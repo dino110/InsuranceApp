@@ -5,13 +5,8 @@ import SideBar from "./components/SideBar";
 import MainForm from "./components/MainForm";
 import Calculations from "./components/Calculations";
 import { InsuranceContextProvider } from "./InsuranceContext";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +20,7 @@ function App() {
           <MainForm />
           <Calculations />
         </Container>
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </InsuranceContextProvider>
   );

@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box, InputAdornment } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 import { getInsurancePrice } from "../../api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Coverages } from "../SideBar";
 import { Discounts } from "../Header";
 import axios from "axios";
@@ -24,6 +24,8 @@ const MainForm: React.FC = () => {
     formState: { errors, isSubmitSuccessful, isValid },
   } = useForm<FormData>();
 
+  const queryClient = useQueryClient();
+
   const {
     discounts,
     coverages,
@@ -36,16 +38,24 @@ const MainForm: React.FC = () => {
 
   const mutation = useMutation(
     (data: {}) => {
-      console.log(data);
       return axios.post(`http://localhost:4000/api/getPrice`, data);
     },
     {
       onSuccess(data, variables, context) {
         console.log("juhuhuhu", data);
+        console.log("variables", variables);
+
         const { insurancePrices, coveragePrices, discountPrices } = data.data;
-        setCoveragePrices(coveragePrices);
-        setDiscountPrices(discountPrices);
-        setInsurancePrices(insurancePrices);
+        queryClient.setQueryData(
+          ["insurancePrices"],
+          (oldData) => insurancePrices
+        );
+        queryClient.setQueryData(["coveragePrices"], coveragePrices);
+        queryClient.setQueryData(["discountPrices"], discountPrices);
+
+        // setCoveragePrices(coveragePrices);
+        // setDiscountPrices(discountPrices);
+        //  setInsurancePrices(insurancePrices);
       },
       onError(error, variables, context) {
         console.log(error);

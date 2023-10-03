@@ -80,7 +80,7 @@ export const getInsurancePrice = async (
 
     const basePrice: number = calculateBasePrice(
       ageConsant,
-      100000 //Number(cityPopulation.cityPopulation)
+      Number(cityPopulation.cityPopulation)
     );
 
     const coveragePrices: CoveragePrices = calculateCoverages(

@@ -1,10 +1,15 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { InsurancePrices } from "../../InsuranceContext";
 
 const Calculations: React.FC = () => {
   const { discountPrices, coveragePrices, insurancePrices, mainForm } =
     useInsuranceContext();
+
+  const queryClient = useQueryClient();
+  const queryData: any = queryClient.getQueryData(["insurancePrices"]);
 
   return (
     <Stack direction="column" gap={2} sx={{ mt: "32px", mb: "40px" }}>
@@ -77,6 +82,7 @@ const Calculations: React.FC = () => {
           </Typography>
         )}
       </Box>
+      <Box>{queryData?.basePrice || ""}</Box>
     </Stack>
   );
 };
