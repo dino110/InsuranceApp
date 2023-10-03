@@ -3,6 +3,10 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { TextField, Button, Grid, Box, InputAdornment } from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 import { getInsurancePrice } from "../../api";
+import { useMutation } from "@tanstack/react-query";
+import { Coverages } from "../SideBar";
+import { Discounts } from "../Header";
+import axios from "axios";
 
 export interface FormData {
   name: string;
@@ -30,8 +34,34 @@ const MainForm: React.FC = () => {
     setInsurancePrices,
   } = useInsuranceContext();
 
+  const mutation = useMutation(
+    (data: {}) => {
+      console.log(data);
+      return axios.post(`http://localhost:4000/api/getPrice`, data);
+    },
+    {
+      onSuccess(data, variables, context) {
+        console.log("juhuhuhu", data);
+        const { insurancePrices, coveragePrices, discountPrices } = data.data;
+        setCoveragePrices(coveragePrices);
+        setDiscountPrices(discountPrices);
+        setInsurancePrices(insurancePrices);
+      },
+      onError(error, variables, context) {
+        console.log(error);
+        alert(error);
+      },
+    }
+  );
+
   const getAndSetPrices = async (formData = mainForm) => {
-    const allPrices = await getInsurancePrice({
+    const data = {
+      mainForm: formData,
+      discounts,
+      coverages,
+    };
+    mutation.mutate(data);
+    /* const allPrices = await getInsurancePrice({
       mainForm: formData,
       discounts,
       coverages,
@@ -45,7 +75,7 @@ const MainForm: React.FC = () => {
       setInsurancePrices(insurancePrices);
     } else {
       alert(allPrices.message);
-    }
+    }*/
   };
 
   useEffect(() => {
@@ -73,6 +103,7 @@ const MainForm: React.FC = () => {
 
   return (
     <Box maxWidth="420px" sx={{ mt: "40px" }}>
+      {mutation.isLoading && "LOADING....."}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

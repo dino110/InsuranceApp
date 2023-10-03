@@ -80,7 +80,7 @@ export const getInsurancePrice = async (
 
     const basePrice: number = calculateBasePrice(
       ageConsant,
-      Number(cityPopulation.cityPopulation)
+      100000 //Number(cityPopulation.cityPopulation)
     );
 
     const coveragePrices: CoveragePrices = calculateCoverages(
@@ -97,7 +97,7 @@ export const getInsurancePrice = async (
       calculateDiscountsAndTotalPrice(
         basePrice,
         coveragePrices,
-        Number(mainForm.voucher),
+        Number(mainForm.voucher) || 0,
         discounts
       );
 
@@ -131,7 +131,7 @@ export const getInsurancePrice = async (
   const insurance = new Insurance(InsuranceData);
   insurance
     .save()
-    .then()
+    .then(() => console.log("Data saved to DB.."))
     .catch((error: any) => {
       console.log(error);
     });
