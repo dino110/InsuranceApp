@@ -7,14 +7,17 @@ const Calculations: React.FC = () => {
     useInsuranceContext();
 
   return (
-    <Stack direction="column" gap={2} sx={{ mt: "32px", mb: "40px" }}>
-      <Typography>
-        <strong>Base price:</strong> {insurancePrices.basePrice} EUR
-      </Typography>
+    <Stack direction="column" gap={2} sx={{ margin: "32px 0 40px 16px" }}>
       <Box>
-        <Typography>
-          <strong>Discounts / surcharges:</strong>
+        <Typography fontWeight="bold" display="inline">
+          Base price:
         </Typography>
+        <Typography display="inline" marginLeft={1}>
+          {insurancePrices.basePrice} EUR
+        </Typography>
+      </Box>
+      <Box>
+        <Typography fontWeight="bold">Discounts / surcharges:</Typography>
         <Stack
           direction="column"
           gap={1}
@@ -44,9 +47,7 @@ const Calculations: React.FC = () => {
         </Stack>
       </Box>
       <Box>
-        <Typography>
-          <strong>Coverages:</strong>
-        </Typography>
+        <Typography fontWeight="bold">Coverages:</Typography>
         <Stack
           direction="column"
           gap={1}
@@ -68,8 +69,11 @@ const Calculations: React.FC = () => {
         </Stack>
       </Box>
       <Box>
-        <Typography display="inline">
-          <strong>Total price:</strong> {insurancePrices.totalPrice} EUR
+        <Typography fontWeight="bold" display="inline">
+          Total price:
+        </Typography>
+        <Typography display="inline" marginLeft={1}>
+          {insurancePrices.totalPrice} EUR
         </Typography>
         {+mainForm.voucher > 0 && (
           <Typography display="inline" ml={2} fontSize={14}>

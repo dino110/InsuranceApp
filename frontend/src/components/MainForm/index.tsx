@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { TextField, Button, Grid, Box, InputAdornment } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Grid,
+  Box,
+  InputAdornment,
+  Typography,
+} from "@mui/material";
 import { useInsuranceContext } from "../../InsuranceContext";
 import { getInsurancePrice } from "../../api";
 
@@ -72,7 +79,10 @@ const MainForm: React.FC = () => {
   };
 
   return (
-    <Box maxWidth="420px" sx={{ mt: "40px" }}>
+    <Box maxWidth="460px" sx={{ mt: "40px", ml: "16px" }}>
+      <Typography fontWeight="bold" fontSize="24px" sx={{ margin: "16px 0px" }}>
+        User data
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12}>

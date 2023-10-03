@@ -9,12 +9,10 @@ import { InsuranceContextProvider } from "./InsuranceContext";
 function App() {
   return (
     <InsuranceContextProvider>
-      <Container>
-        <Header />
-        <SideBar />
-        <MainForm />
-        <Calculations />
-      </Container>
+      <Header />
+      <SideBar />
+      <MainForm />
+      <Calculations />
     </InsuranceContextProvider>
   );
 }

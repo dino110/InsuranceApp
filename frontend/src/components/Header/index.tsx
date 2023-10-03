@@ -31,7 +31,7 @@ const Header: React.FC = () => {
       container
       columns={{ xs: 12, md: 10 }}
       alignItems="center"
-      sx={{ padding: "16px 8px", backgroundColor: "#D3D3D3" }}
+      sx={{ padding: "16px 16px", backgroundColor: "#D3D3D3" }}
     >
       <Grid item xs={6} md={2}>
         <FormControlLabel

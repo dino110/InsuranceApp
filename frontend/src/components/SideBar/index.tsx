@@ -20,7 +20,7 @@ const Container = styled(Box)({
   float: "right",
   position: "relative",
   marginBottom: "16px",
-  padding: "8px 0px",
+  padding: "14px 0px",
   backgroundColor: "#D3D3D3",
 });
 
@@ -38,74 +38,72 @@ const SideBar = (): JSX.Element => {
 
   return (
     <Container width={{ xs: "100%", md: "260px" }}>
-      <form>
-        <Typography
-          fontWeight={600}
-          sx={{ padding: "12px 8px" }}
-          variant="h6"
-          align="left"
-        >
-          Coverages
-        </Typography>
-        <Stack
-          direction={{ xs: "row", md: "column" }}
-          justifyItems="left"
-          padding="0px 8px"
-          gap="16px"
-        >
-          <FormControlLabel
-            control={
-              <Controller
-                name="bonusProtection"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e, value) => handleChange(e.target.name, value)}
-                  />
-                )}
-              />
-            }
-            label="Bonus protection"
-          />
-          <FormControlLabel
-            control={
-              <Controller
-                name="aoPlus"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e, value) => handleChange(e.target.name, value)}
-                  />
-                )}
-              />
-            }
-            label="AO+"
-          />
-          <FormControlLabel
-            control={
-              <Controller
-                name="glassProtection"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Checkbox
-                    {...field}
-                    color="primary"
-                    onChange={(e, value) => handleChange(e.target.name, value)}
-                  />
-                )}
-              />
-            }
-            label="Glass protection"
-          />
-        </Stack>
-      </form>
+      <Typography
+        fontWeight={600}
+        sx={{ padding: "8px 16px" }}
+        variant="h6"
+        align="left"
+      >
+        Coverages
+      </Typography>
+      <Stack
+        direction={{ xs: "row", md: "column" }}
+        justifyItems="left"
+        padding="0px 16px"
+        gap="16px"
+      >
+        <FormControlLabel
+          control={
+            <Controller
+              name="bonusProtection"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  color="primary"
+                  onChange={(e, value) => handleChange(e.target.name, value)}
+                />
+              )}
+            />
+          }
+          label="Bonus protection"
+        />
+        <FormControlLabel
+          control={
+            <Controller
+              name="aoPlus"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  color="primary"
+                  onChange={(e, value) => handleChange(e.target.name, value)}
+                />
+              )}
+            />
+          }
+          label="AO+"
+        />
+        <FormControlLabel
+          control={
+            <Controller
+              name="glassProtection"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}
+                  color="primary"
+                  onChange={(e, value) => handleChange(e.target.name, value)}
+                />
+              )}
+            />
+          }
+          label="Glass protection"
+        />
+      </Stack>
     </Container>
   );
 };
