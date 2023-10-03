@@ -13,7 +13,7 @@ export interface Discounts {
 const Header: React.FC = () => {
   const { control } = useForm<Discounts>();
 
-  const { mainForm, setDiscounts, insurancePrices } = useInsuranceContext();
+  const { customerData, setDiscounts, insurancePrices } = useInsuranceContext();
 
   const handleChange = (name: string, value: boolean) => {
     setDiscounts((prevDiscounts) => ({
@@ -23,8 +23,8 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    handleChange("strongCarSurcharge", Number(mainForm.vehiclePower) > 100);
-  }, [mainForm.vehiclePower]);
+    handleChange("strongCarSurcharge", Number(customerData.vehiclePower) > 100);
+  }, [customerData.vehiclePower]);
 
   return (
     <Grid
@@ -71,7 +71,7 @@ const Header: React.FC = () => {
           label="Adviser discount"
         />
       </Grid>
-      {Number(mainForm.vehiclePower) > 80 && (
+      {Number(customerData.vehiclePower) > 80 && (
         <Grid item xs={6} md={2}>
           <FormControlLabel
             control={
@@ -103,7 +103,7 @@ const Header: React.FC = () => {
                 <Checkbox
                   {...field}
                   disabled={true}
-                  checked={Number(mainForm.vehiclePower) > 100}
+                  checked={Number(customerData.vehiclePower) > 100}
                   color="primary"
                 />
               )}

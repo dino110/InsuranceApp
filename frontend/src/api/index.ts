@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { Discounts } from "../components/Header";
-import { FormData } from "../components/MainForm";
+import { CustomerData } from "../components/MainForm";
 import { Coverages } from "../components/SideBar";
 import {
   InsurancePrices,
@@ -28,7 +28,7 @@ interface ErrorRespone {
 type ResponseType = SuccessResponse | ErrorRespone;
 
 export const getInsurancePrice = async (data: {
-  mainForm: FormData;
+  customerData: CustomerData;
   coverages: Coverages;
   discounts: Discounts;
 }): Promise<ResponseType> => {

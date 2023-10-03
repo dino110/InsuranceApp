@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 import { Discounts } from "./components/Header";
-import { FormData } from "./components/MainForm";
+import { CustomerData } from "./components/MainForm";
 import { Coverages } from "./components/SideBar";
 
 export interface InsurancePrices {
@@ -25,7 +25,7 @@ export interface DiscountPrices {
 interface InsuranceContextType {
   discounts: Discounts;
   coverages: Coverages;
-  mainForm: FormData;
+  customerData: CustomerData;
   insurancePrices: InsurancePrices;
   coveragePrices: CoveragePrices;
   discountPrices: DiscountPrices;
@@ -35,8 +35,8 @@ interface InsuranceContextType {
   setCoverages: React.Dispatch<
     React.SetStateAction<InsuranceContextType["coverages"]>
   >;
-  setMainForm: React.Dispatch<
-    React.SetStateAction<InsuranceContextType["mainForm"]>
+  setCustomerData: React.Dispatch<
+    React.SetStateAction<InsuranceContextType["customerData"]>
   >;
   setInsurancePrices: React.Dispatch<
     React.SetStateAction<InsuranceContextType["insurancePrices"]>
@@ -79,7 +79,7 @@ export function InsuranceContextProvider({
     aoPlus: false,
   });
 
-  const [mainForm, setMainForm] = useState({
+  const [customerData, setCustomerData] = useState({
     name: "",
     birthdate: "",
     city: "",
@@ -111,8 +111,8 @@ export function InsuranceContextProvider({
     setDiscounts,
     coverages,
     setCoverages,
-    mainForm,
-    setMainForm,
+    customerData,
+    setCustomerData,
     discountPrices,
     setDiscountPrices,
     coveragePrices,

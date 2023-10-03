@@ -9,7 +9,7 @@ import {
 import {
   Coverages,
   Discounts,
-  FormData,
+  CustomerData,
   CoveragePrices,
   DiscountPrices,
   InsuranceData,
@@ -21,7 +21,7 @@ import Insurance from "../model/insurance.model";
 const axios = setupCache(Axios);
 
 interface RequestBody {
-  mainForm: FormData;
+  customerData: CustomerData;
   discounts?: Discounts;
   coverages?: Coverages;
 }
@@ -30,14 +30,14 @@ export const getInsurancePrice = async (
   req: Request<RequestBody>,
   res: Response
 ) => {
-  const { mainForm, discounts, coverages } = req.body;
+  const { customerData, discounts, coverages } = req.body;
 
-  if (!mainForm) {
+  if (!customerData) {
     return res.status(400).send({ error: "No data provided!" });
   }
 
   var InsuranceData: InsuranceData = {
-    userData: mainForm,
+    userData: customerData,
     coveragePrices: {
       bonusProtection: 0,
       aoPlus: 0,
@@ -56,8 +56,8 @@ export const getInsurancePrice = async (
   };
 
   // if provided priceMatch is not bigger than 0 or its NaN, ie priceMatch not provided
-  if (!(Number(mainForm.priceMatch) > 0)) {
-    const customerAge = calculateAge(mainForm.birthdate);
+  if (!(Number(customerData.priceMatch) > 0)) {
+    const customerAge = calculateAge(customerData.birthdate);
     const ageConsant = getConstantByAge(customerAge);
 
     if (ageConsant === 0) {
@@ -66,7 +66,7 @@ export const getInsurancePrice = async (
         .send({ error: "User must be at least 18 years old" });
     }
 
-    const cityPopulation = await getCityPopulation(mainForm.city);
+    const cityPopulation = await getCityPopulation(customerData.city);
 
     if (cityPopulation?.error) {
       return res
@@ -86,7 +86,7 @@ export const getInsurancePrice = async (
     const coveragePrices: CoveragePrices = calculateCoverages(
       basePrice,
       customerAge,
-      Number(mainForm.vehiclePower),
+      Number(customerData.vehiclePower),
       coverages
     );
 
@@ -97,7 +97,7 @@ export const getInsurancePrice = async (
       calculateDiscountsAndTotalPrice(
         basePrice,
         coveragePrices,
-        Number(mainForm.voucher) || 0,
+        Number(customerData.voucher) || 0,
         discounts
       );
 
@@ -110,7 +110,7 @@ export const getInsurancePrice = async (
   } else {
     // Price match calculation
     const basePrice: number = +(
-      +mainForm.priceMatch /
+      +customerData.priceMatch /
       (1 +
         (coverages?.bonusProtection ? 12 / 100 : 0) -
         (discounts?.commercialDiscount ? 10 / 100 : 0))
@@ -125,7 +125,7 @@ export const getInsurancePrice = async (
     InsuranceData.coveragePrices.bonusProtection = bonusProtection;
     InsuranceData.discountPrices.commercialDiscount = commercialDiscount;
     InsuranceData.insurancePrices.basePrice = basePrice;
-    InsuranceData.insurancePrices.totalPrice = +mainForm.priceMatch;
+    InsuranceData.insurancePrices.totalPrice = +customerData.priceMatch;
   }
 
   const insurance = new Insurance(InsuranceData);

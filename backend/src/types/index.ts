@@ -1,4 +1,4 @@
-export interface FormData {
+export interface CustomerData {
   name: string;
   birthdate: string;
   city: string;
@@ -39,7 +39,7 @@ export interface InsurancePrices {
 }
 
 export interface InsuranceData {
-  userData: FormData;
+  userData: CustomerData;
   coveragePrices: CoveragePrices;
   discountPrices: DiscountPrices;
   insurancePrices: InsurancePrices;

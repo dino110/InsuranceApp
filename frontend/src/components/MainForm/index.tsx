@@ -11,7 +11,7 @@ import {
 import { useInsuranceContext } from "../../InsuranceContext";
 import { getInsurancePrice } from "../../api";
 
-export interface FormData {
+export interface CustomerData {
   name: string;
   birthdate: string;
   city: string;
@@ -25,21 +25,21 @@ const MainForm: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors, isSubmitSuccessful, isValid },
-  } = useForm<FormData>();
+  } = useForm<CustomerData>();
 
   const {
     discounts,
     coverages,
-    mainForm,
-    setMainForm,
+    customerData,
+    setCustomerData,
     setCoveragePrices,
     setDiscountPrices,
     setInsurancePrices,
   } = useInsuranceContext();
 
-  const getAndSetPrices = async (formData = mainForm) => {
+  const getAndSetPrices = async (formData = customerData) => {
     const allPrices = await getInsurancePrice({
-      mainForm: formData,
+      customerData: formData,
       discounts,
       coverages,
     });
@@ -66,14 +66,17 @@ const MainForm: React.FC = () => {
     coverages,
   ]);
 
-  const onSubmit: SubmitHandler<FormData> = (formData) => {
-    setMainForm((prevMainForm) => ({ ...prevMainForm, ...formData }));
+  const onSubmit: SubmitHandler<CustomerData> = (formData) => {
+    setCustomerData((prevcustomerData) => ({
+      ...prevcustomerData,
+      ...formData,
+    }));
     getAndSetPrices(formData);
   };
 
   const handleVehiclePowerChange = (value: string) => {
-    setMainForm((prevMainForm) => ({
-      ...prevMainForm,
+    setCustomerData((prevCustomerData) => ({
+      ...prevCustomerData,
       vehiclePower: value,
     }));
   };
